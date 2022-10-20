@@ -18,6 +18,14 @@ from sensor_msgs.msg import LaserScan
 
 #     counter += 1
 
+def plotter(msg):
+    theta = np.linspace(msg.angle_min, msg.angle_max, 662)
+    print(theta)
+    plt.polar(theta, msg.ranges)
+    plt.draw()
+    plt.pause(0.00000000001)
+    # plt.savefig('msg_visual4.png')
+
 
 if __name__ == '__main__':
     counter = 0
@@ -26,15 +34,18 @@ if __name__ == '__main__':
         rospy.init_node("visual")
     except:
         pass
-    lidar_data = rospy.wait_for_message("/base_scan", LaserScan)
-    # rospy.Subscriber("/base_scan", LaserScan, plotter)
-    print(lidar_data)
+    # lidar_data = rospy.wait_for_message("/base_scan", LaserScan)
+    rospy.Subscriber("/base_scan", LaserScan, plotter)
+    # print(msg)
+    plt.ion()
+    plt.show()
+    rospy.spin()
 
 
-    theta = np.linspace(lidar_data.angle_min, lidar_data.angle_max, 662)
-    print(theta)
-    plt.polar(theta, lidar_data.ranges)
-    plt.savefig('lidar_data_visual4.png')
+    # theta = np.linspace(lidar_data.angle_min, lidar_data.angle_max, 662)
+    # print(theta)
+    # plt.polar(theta, lidar_data.ranges)
+    # plt.savefig('lidar_data_visual4.png')
 
     # rospy.init_node("plotter")
     # rospy.Subscriber("position_measurements", Subject, plot_x)
