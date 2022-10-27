@@ -6,6 +6,14 @@ import rospy
 # from qualisys.msg import Subject
 from sensor_msgs.msg import LaserScan
 
+# from astropy.io import fits
+# from astropy.utils.data import get_pkg_data_filename
+# from astropy.convolution import Gaussian1DKernel
+# from scipy.signal import convolve as scipy_convolve
+# from astropy.convolution import convolve
+
+from sklearn.impute import KNNImputer
+
 # def plot_x(msg):
 #     global counter
 #     if counter % 10 == 0:
@@ -20,8 +28,19 @@ from sensor_msgs.msg import LaserScan
 
 def plotter(msg):
     theta = np.linspace(msg.angle_min, msg.angle_max, 662)
-    print(theta)
-    plt.polar(theta, msg.ranges)
+    # print(theta)
+    ranges = np.array(msg.ranges)
+    imputer = KNNImputer(n_neighbors=2)
+    imputer.fit_transform(ranges)
+    # ranges[np.isnan(ranges)] = 1
+
+    # kernel = Gaussian1DKernel(1)
+    # astropy_conv = convolve(ranges, kernel)
+    # print(astropy_conv)
+
+    # print(ranges)
+    plt.clf()
+    plt.polar(theta, ranges)
     plt.draw()
     plt.pause(0.00000000001)
     # plt.savefig('msg_visual4.png')
