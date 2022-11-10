@@ -17,6 +17,7 @@ def smoothen(msg, radius):
         try: 
             data_copy[index] = np.mean(temp_sqr)
         except:
+            print("problem happened")
             data_copy[index] = msg.range_max
     return data_copy
 
