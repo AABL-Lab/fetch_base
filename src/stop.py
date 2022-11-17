@@ -5,10 +5,9 @@ import rospy
 from std_msgs.msg import Bool
 import threading
 from sensor_msgs.msg import LaserScan
-from laser_range_visualization import smoothen
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import TwistStamped
-import collision_detection ## TODO: fix this!! import the publisher so our subsriber works
+from collision_detection import collision ## TODO: fix this!! import the publisher so our subsriber works
 
 TwistMsg = Twist
 
@@ -23,13 +22,7 @@ TwistMsg = Twist
 #         self.th = 0.0
 #         self.speed = 0.0
 #         self.turn = 0.0
-#         self.condition = threading.Condition()
-#         self.done = False
-
-#         # Set timeout to None if rate is 0 (causes new_message to wait forever
-#         # for new data to publish)
-#         if rate != 0.0:
-#             self.timeout = 1.0 / rate
+#         self.conditio_detectionmeout = 1.0 / rate
 #         else:
 #             self.timeout = None
 
@@ -53,9 +46,9 @@ TwistMsg = Twist
 
 def stop(data):
     if(data.data):
-        stop_pub = rospy.Publisher('cmd_vel', TwistMsg, queue_size=1)
+        stop_pub = rospy.Publisher('cmd_vel', TwistMsg, queue_size=5)
         twist_msg = TwistMsg()
-        twist = twist_msg.twist
+        twist = twist_msg
         twist.linear.x = 0
         twist.linear.y = 0
         twist.linear.z = 0
@@ -63,6 +56,7 @@ def stop(data):
         twist.angular.y = 0
         twist.angular.z = 0
         stop_pub.publish(twist_msg)
+        print("stop")
     else:
         print("go")
 
@@ -75,6 +69,6 @@ if __name__ == '__main__':
         rospy.init_node("stop")
     except:
         pass
-    rospy.Subscriber("/in_collision", Bool, stop, queue_size=1)
+    rospy.Subscriber("/in_collision", Bool, stop, queue_size=5)
     rospy.sleep(0.01)
     rospy.spin()
