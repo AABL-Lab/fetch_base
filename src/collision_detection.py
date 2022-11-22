@@ -7,6 +7,9 @@ import threading
 from sensor_msgs.msg import LaserScan
 from laser_range_visualization import smoothen
 
+distance = 1.5
+percent_range = 0.1
+
 def collision(msg):
     temp = False
     try:
@@ -14,9 +17,9 @@ def collision(msg):
     except:
         pass
     data = smoothen(msg, 3)
-    forward_data = data[int((len(data)) * 0.3):int((len(data)) * 0.7)]
+    forward_data = data[int((len(data)) * (0.5 - percent_range)):int((len(data)) * (0.5 + percent_range))]
     for i in range(len(forward_data)):
-        if (forward_data[i] < 1):
+        if (forward_data[i] < distance):
             collision_pub.publish(Bool(True))
     collision_pub.publish(Bool(False))
             
