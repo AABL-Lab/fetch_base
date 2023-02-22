@@ -3,7 +3,6 @@ from matplotlib import pyplot as plt
 import numpy as np 
 import rospy
 from std_msgs.msg import Bool
-import threading
 from sensor_msgs.msg import LaserScan
 from laser_range_visualization import smoothen
 
@@ -26,7 +25,6 @@ def collision(msg):
 
 
 if __name__ == '__main__':
-    counter = 0
     print("orange")
     try: 
         rospy.init_node("detect")
