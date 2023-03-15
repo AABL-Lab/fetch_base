@@ -5,6 +5,7 @@ import rospy
 from std_msgs.msg import Bool
 from sensor_msgs.msg import LaserScan
 from laser_range_visualization import smoothen
+from std_msgs.msg import UInt16MultiArray
 
 distance = 1.5
 percent_range = 0.1
@@ -21,7 +22,9 @@ def collision(msg):
         if (forward_data[i] < distance):
             collision_pub.publish(Bool(True))
     collision_pub.publish(Bool(False))
-            
+
+def cliff_detection(msg):
+           
 
 
 if __name__ == '__main__':
@@ -31,5 +34,6 @@ if __name__ == '__main__':
     except:
         pass
     rospy.Subscriber("/base_scan", LaserScan, collision, queue_size=5)
+    rospy.Subscriber("serial_data", UInt16MultiArray, cliff_detection, queue_size=5)
     rospy.sleep(0.01)
     rospy.spin()

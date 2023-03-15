@@ -32,11 +32,13 @@ def serial_read():
         serial_pub = rospy.Publisher("/serial_data", UInt16MultiArray, latch=True, queue_size=5)
     except:
         pass
-    value = recv(port, 0.5)
+    value = recv(port, 0.5).strip()
     print(value)
-    parsed = value.split(' ')
-    data_vals = [int(val) for val in parsed[1:]]
+    parsed = value.split('\t')
+    data_vals = [int(val) for val in parsed]
+    print(data_vals)
     msg = UInt16MultiArray(data=data_vals)
+    print(msg)
     serial_pub.publish(msg)
 
 if __name__ == '__main__':
