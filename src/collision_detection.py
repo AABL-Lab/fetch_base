@@ -9,9 +9,9 @@ from std_msgs.msg import UInt16MultiArray
 
 distance = 1.5
 percent_range = 0.1
+cliff = 21
 
 def collision(msg):
-    temp = False
     try:
         collision_pub = rospy.Publisher("/in_collision", Bool, latch=True, queue_size=5)
     except:
@@ -23,8 +23,15 @@ def collision(msg):
             collision_pub.publish(Bool(True))
     collision_pub.publish(Bool(False))
 
-def cliff_detection(msg):
-           
+# def cliff_detection(msg):
+#     try:
+#         cliff_detection_pub = rospy.Publisher("/cliff_detected", Bool, latch=True, queue_size=5)
+#     except:
+#         pass
+#     for i in msg:
+#         if (i > cliff):
+#             cliff_detection_pub.publish(Bool(True))
+#     cliff_detection_pub.publish(Bool(False))
 
 
 if __name__ == '__main__':
@@ -34,6 +41,6 @@ if __name__ == '__main__':
     except:
         pass
     rospy.Subscriber("/base_scan", LaserScan, collision, queue_size=5)
-    rospy.Subscriber("serial_data", UInt16MultiArray, cliff_detection, queue_size=5)
+    # rospy.Subscriber("/serial_data", UInt16MultiArray, cliff_detection, queue_size=5)
     rospy.sleep(0.01)
     rospy.spin()

@@ -30,5 +30,6 @@ if __name__ == '__main__':
     except:
         pass
     rospy.Subscriber("/in_collision", Bool, stop, queue_size=5)
+    # rospy.Subscriber("/cliff_detected", Bool, stop, queue_size=5)
     rospy.sleep(0.01)
     rospy.spin()
